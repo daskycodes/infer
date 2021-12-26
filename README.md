@@ -83,9 +83,9 @@ iex> Infer.is_document(binary)
 true
 ```
 
-### `Infer.is_docx/1`
+### `Infer.Doc.is_docx/1`
 
-Takes the binary file contents as argument and returns whether the file is a document (microsoft office, open office)
+Takes the binary file contents as arguments. Returns `true` if it's Microsoft Word Open XML Format Document (DOCX) data.
 
 ```elixir
 iex> binary = File.read!("test/docs/sample.docx")
