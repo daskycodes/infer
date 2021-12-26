@@ -18,7 +18,7 @@ end
 ```
 
 The docs can
-be found at [https://hexdocs.pm/infer](https://hexdocs.pm/infer_nif).
+be found at [https://hexdocs.pm/infer](https://hexdocs.pm/infer).
 
 ## Examples
 
