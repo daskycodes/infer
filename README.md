@@ -138,6 +138,7 @@ true
 | audio/x-wav  | wav       |
 | audio/amr    | amr       |
 | audio/aac    | aac       |
+| audio/aiff   | aiff      |
 
 ### Document
 
