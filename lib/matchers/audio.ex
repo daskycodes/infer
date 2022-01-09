@@ -67,4 +67,11 @@ defmodule Infer.Audio do
   @spec is_aac(binary()) :: boolean()
   def is_aac(<<0xFF, 0xF1, 0xF9, _rest::binary>>), do: true
   def is_aac(_binary), do: false
+
+  @doc """
+  Takes the binary file contents as arguments. Returns `true` if it's an aiff.
+  """
+  @spec is_aiff(binary()) :: boolean()
+  def is_aiff(<<0x46, 0x4F, 0x52, 0x4D, _data::binary-size(4), 0x41, 0x49, 0x46, 0x46, _rest::binary>>), do: true
+  def is_aiff(_binary), do: false
 end

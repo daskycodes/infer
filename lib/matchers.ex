@@ -63,6 +63,7 @@ defmodule Infer.Matchers do
       %Infer.Type{matcher_type: :audio, mime_type: "audio/x-wav", extension: "wav", matcher: &Infer.Audio.is_wav/1},
       %Infer.Type{matcher_type: :audio, mime_type: "audio/amr", extension: "amr", matcher: &Infer.Audio.is_amr/1},
       %Infer.Type{matcher_type: :audio, mime_type: "audio/aac", extension: "aac", matcher: &Infer.Audio.is_aac/1},
+      %Infer.Type{matcher_type: :audio, mime_type: "audio/x-aiff", extension: "aiff", matcher: &Infer.Audio.is_aiff/1},
       # Font
       %Infer.Type{matcher_type: :font, mime_type: "application/font-woff", extension: "woff", matcher: &Infer.Font.is_woff/1},
       %Infer.Type{matcher_type: :font, mime_type: "application/font-woff2", extension: "woff2", matcher: &Infer.Font.is_woff2/1},
