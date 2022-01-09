@@ -12,7 +12,7 @@ by adding `infer` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:infer, "~> 0.1.0"}
+    {:infer, "~> 0.1.1"}
   ]
 end
 ```

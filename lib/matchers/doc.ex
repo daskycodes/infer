@@ -208,13 +208,11 @@ defmodule Infer.Doc do
     root_directory_address = sector_size + root_directory_index * sector_size
     position = root_directory_address + 80
 
-    <<_offset::binary-size(position), guid::binary-size(16), _rest::binary>> = doc
-
-    case guid do
-      <<16, 141, 129, 100, 155, 79, 207, 17, 134, 234, 0, 170, 0, 185, 41, 232>> -> :ppt
-      <<6, 9, 2, 0, 0, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 70>> -> :doc
-      <<32, 8, 2, 0, 0, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 70>> -> :xls
-      <<32, 8, 1, 0, 0, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 70>> -> :xls
+    case doc do
+      <<_offset::binary-size(position), 16, 141, 129, 100, 155, 79, 207, 17, 134, 234, 0, 170, 0, 185, 41, 232, _rest::binary>> -> :ppt
+      <<_offset::binary-size(position), 6, 9, 2, 0, 0, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 70, _rest::binary>> -> :doc
+      <<_offset::binary-size(position), 32, 8, 2, 0, 0, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 70, _rest::binary>> -> :xls
+      <<_offset::binary-size(position), 32, 8, 1, 0, 0, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 70, _rest::binary>> -> :xls
       _ -> nil
     end
   end
