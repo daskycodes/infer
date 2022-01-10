@@ -32,7 +32,7 @@ defmodule Infer.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ex_doc, "~> 0.24", only: :dev, runtime: false}
+      {:ex_doc, git: "https://github.com/elixir-lang/ex_doc", ref: "a011116", only: :dev, runtime: false}
     ]
   end
 
