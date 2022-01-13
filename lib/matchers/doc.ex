@@ -11,17 +11,17 @@ defmodule Infer.Doc do
   ## Examples
 
       iex> binary = File.read!("test/docs/sample.docx")
-      iex> Infer.Doc.is_docx(binary)
+      iex> Infer.Doc.docx?(binary)
       true
 
       iex> binary = File.read!("test/docs/sample.xlsx")
-      iex> Infer.Doc.is_docx(binary)
+      iex> Infer.Doc.docx?(binary)
       false
 
   """
-  @spec is_docx(binary()) :: boolean()
-  def is_docx(<<?P, ?K, 0x03, 0x04, _part::binary-size(26), "word/", _rest::binary>>), do: true
-  def is_docx(binary), do: msooxml(binary) == :docx
+  @spec docx?(binary()) :: boolean()
+  def docx?(<<?P, ?K, 0x03, 0x04, _part::binary-size(26), "word/", _rest::binary>>), do: true
+  def docx?(binary), do: msooxml?(binary) == :docx
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's Microsoft Excel Open XML Format Spreadsheet (XLSX) data.
@@ -29,17 +29,17 @@ defmodule Infer.Doc do
   ## Examples
 
       iex> binary = File.read!("test/docs/sample.xlsx")
-      iex> Infer.Doc.is_xlsx(binary)
+      iex> Infer.Doc.xlsx?(binary)
       true
 
       iex> binary = File.read!("test/docs/sample.docx")
-      iex> Infer.Doc.is_xlsx(binary)
+      iex> Infer.Doc.xlsx?(binary)
       false
 
   """
-  @spec is_xlsx(binary()) :: boolean()
-  def is_xlsx(<<?p, ?k, 0x03, 0x04, _part::binary-size(26), "xl/", _rest::binary>>), do: true
-  def is_xlsx(binary), do: msooxml(binary) == :xlsx
+  @spec xlsx?(binary()) :: boolean()
+  def xlsx?(<<?p, ?k, 0x03, 0x04, _part::binary-size(26), "xl/", _rest::binary>>), do: true
+  def xlsx?(binary), do: msooxml?(binary) == :xlsx
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's Microsoft PowerPoint Open XML Presentation (PPTX) data.
@@ -47,34 +47,34 @@ defmodule Infer.Doc do
   ## Examples
 
       iex> binary = File.read!("test/docs/sample.pptx")
-      iex> Infer.Doc.is_pptx(binary)
+      iex> Infer.Doc.pptx?(binary)
       true
 
       iex> binary = File.read!("test/docs/sample.xlsx")
-      iex> Infer.Doc.is_pptx(binary)
+      iex> Infer.Doc.pptx?(binary)
       false
 
   """
-  @spec is_pptx(binary()) :: boolean()
-  def is_pptx(<<?p, ?k, 0x03, 0x04, _part::binary-size(26), "ppt/", _rest::binary>>), do: true
-  def is_pptx(binary), do: msooxml(binary) == :pptx
+  @spec pptx?(binary()) :: boolean()
+  def pptx?(<<?p, ?k, 0x03, 0x04, _part::binary-size(26), "ppt/", _rest::binary>>), do: true
+  def pptx?(binary), do: msooxml?(binary) == :pptx
 
-  defp msooxml(<<?P, ?K, 0x03, 0x04, _part::binary-size(26), "[Content_Types].xml", _rest::binary>> = binary) do
+  defp msooxml?(<<?P, ?K, 0x03, 0x04, _part::binary-size(26), "[Content_Types].xml", _rest::binary>> = binary) do
     {:ok, parts} = :zip.unzip(binary, [:memory])
     search_x_format(parts)
   end
 
-  defp msooxml(<<?P, ?K, 0x03, 0x04, _part::binary-size(26), "docProps", _rest::binary>> = binary) do
+  defp msooxml?(<<?P, ?K, 0x03, 0x04, _part::binary-size(26), "docProps", _rest::binary>> = binary) do
     {:ok, parts} = :zip.unzip(binary, [:memory])
     search_x_format(parts)
   end
 
-  defp msooxml(<<?P, ?K, 0x03, 0x04, _part::binary-size(26), "_rels/.rels", _rest::binary>> = binary) do
+  defp msooxml?(<<?P, ?K, 0x03, 0x04, _part::binary-size(26), "_rels/.rels", _rest::binary>> = binary) do
     {:ok, parts} = :zip.unzip(binary, [:memory])
     search_x_format(parts)
   end
 
-  defp msooxml(_binary), do: nil
+  defp msooxml?(_binary), do: nil
 
   defp search_x_format([_, _, {[?w, ?o, ?r, ?d, ?/ | _], _} | _]), do: :docx
   defp search_x_format([_, _, {[?x, ?l, ?/ | _], _} | _]), do: :xlsx
@@ -90,19 +90,19 @@ defmodule Infer.Doc do
   ## Examples
 
       iex> binary = File.read!("test/docs/sample.odt")
-      iex> Infer.Doc.is_odt(binary)
+      iex> Infer.Doc.odt?(binary)
       true
 
       iex> binary = File.read!("test/docs/sample.odt")
-      iex> Infer.Doc.is_pptx(binary)
+      iex> Infer.Doc.pptx?(binary)
       false
 
   """
-  @spec is_odt(binary()) :: boolean()
-  def is_odt(<<?P, ?K, 0x03, 0x04, _part::binary-size(26), "mimetype", "application/vnd.oasis.opendocument.text", _rest::binary>>),
+  @spec odt?(binary()) :: boolean()
+  def odt?(<<?P, ?K, 0x03, 0x04, _part::binary-size(26), "mimetype", "application/vnd.oasis.opendocument.text", _rest::binary>>),
     do: true
 
-  def is_odt(_binary), do: false
+  def odt?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's an OpenDocument Spreadsheet Document.
@@ -110,19 +110,19 @@ defmodule Infer.Doc do
   ## Examples
 
       iex> binary = File.read!("test/docs/sample.ods")
-      iex> Infer.Doc.is_ods(binary)
+      iex> Infer.Doc.ods?(binary)
       true
 
       iex> binary = File.read!("test/docs/sample.ods")
-      iex> Infer.Doc.is_odt(binary)
+      iex> Infer.Doc.odt?(binary)
       false
 
   """
-  @spec is_ods(binary()) :: boolean()
-  def is_ods(<<?P, ?K, 0x03, 0x04, _part::binary-size(26), "mimetype", "application/vnd.oasis.opendocument.spreadsheet", _rest::binary>>),
+  @spec ods?(binary()) :: boolean()
+  def ods?(<<?P, ?K, 0x03, 0x04, _part::binary-size(26), "mimetype", "application/vnd.oasis.opendocument.spreadsheet", _rest::binary>>),
     do: true
 
-  def is_ods(_binary), do: false
+  def ods?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's an OpenDocument Presentation Document.
@@ -130,19 +130,19 @@ defmodule Infer.Doc do
   ## Examples
 
       iex> binary = File.read!("test/docs/sample.odp")
-      iex> Infer.Doc.is_odp(binary)
+      iex> Infer.Doc.odp?(binary)
       true
 
       iex> binary = File.read!("test/docs/sample.odp")
-      iex> Infer.Doc.is_odt(binary)
+      iex> Infer.Doc.odt?(binary)
       false
 
   """
-  @spec is_odp(binary()) :: boolean()
-  def is_odp(<<?P, ?K, 0x03, 0x04, _part::binary-size(26), "mimetype", "application/vnd.oasis.opendocument.presentation", _rest::binary>>),
+  @spec odp?(binary()) :: boolean()
+  def odp?(<<?P, ?K, 0x03, 0x04, _part::binary-size(26), "mimetype", "application/vnd.oasis.opendocument.presentation", _rest::binary>>),
     do: true
 
-  def is_odp(_binary), do: false
+  def odp?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's Microsoft Word Document (DOC) data.
@@ -150,17 +150,17 @@ defmodule Infer.Doc do
   ## Examples
 
       iex> binary = File.read!("test/docs/sample.doc")
-      iex> Infer.Doc.is_doc(binary)
+      iex> Infer.Doc.doc?(binary)
       true
 
       iex> binary = File.read!("test/docs/sample.docx")
-      iex> Infer.Doc.is_doc(binary)
+      iex> Infer.Doc.doc?(binary)
       false
 
   """
-  @spec is_doc(binary()) :: boolean()
-  def is_doc(<<0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1, _rest::binary>> = doc), do: search_format(doc) == :doc
-  def is_doc(_binary), do: false
+  @spec doc?(binary()) :: boolean()
+  def doc?(<<0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1, _rest::binary>> = doc), do: search_format(doc) == :doc
+  def doc?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's Microsoft Power Point Document (PPT) data.
@@ -168,17 +168,17 @@ defmodule Infer.Doc do
   ## Examples
 
       iex> binary = File.read!("test/docs/sample.ppt")
-      iex> Infer.Doc.is_ppt(binary)
+      iex> Infer.Doc.ppt?(binary)
       true
 
       iex> binary = File.read!("test/docs/sample.doc")
-      iex> Infer.Doc.is_ppt(binary)
+      iex> Infer.Doc.ppt?(binary)
       false
 
   """
-  @spec is_ppt(binary()) :: boolean()
-  def is_ppt(<<0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1, _rest::binary>> = ppt), do: search_format(ppt) == :ppt
-  def is_ppt(_binary), do: false
+  @spec ppt?(binary()) :: boolean()
+  def ppt?(<<0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1, _rest::binary>> = ppt), do: search_format(ppt) == :ppt
+  def ppt?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's Microsoft Excel (XLS) data.
@@ -186,17 +186,17 @@ defmodule Infer.Doc do
   ## Examples
 
       iex> binary = File.read!("test/docs/sample.xls")
-      iex> Infer.Doc.is_xls(binary)
+      iex> Infer.Doc.xls?(binary)
       true
 
       iex> binary = File.read!("test/docs/sample.doc")
-      iex> Infer.Doc.is_xls(binary)
+      iex> Infer.Doc.xls?(binary)
       false
 
   """
-  @spec is_xls(binary()) :: boolean()
-  def is_xls(<<0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1, _rest::binary>> = ppt), do: search_format(ppt) == :xls
-  def is_xls(_binary), do: false
+  @spec xls?(binary()) :: boolean()
+  def xls?(<<0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1, _rest::binary>> = ppt), do: search_format(ppt) == :xls
+  def xls?(_binary), do: false
 
   defp search_format(
          <<_header::binary-size(30), sector_size::binary-size(2), _dir_offset::binary-size(16), root_directory_index::binary-size(4),

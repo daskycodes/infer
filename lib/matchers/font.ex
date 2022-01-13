@@ -6,16 +6,16 @@ defmodule Infer.Font do
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's a woff font.
   """
-  @spec is_woff(binary()) :: boolean()
-  def is_woff(<<0x77, 0x4F, 0x46, 0x46, 0x00, 0x01, 0x00, 0x00, _rest::binary>>), do: true
-  def is_woff(_binary), do: false
+  @spec woff?(binary()) :: boolean()
+  def woff?(<<0x77, 0x4F, 0x46, 0x46, 0x00, 0x01, 0x00, 0x00, _rest::binary>>), do: true
+  def woff?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's a woff2 font.
   """
-  @spec is_woff2(binary()) :: boolean()
-  def is_woff2(<<0x77, 0x4F, 0x46, 0x32, 0x00, 0x01, 0x00, 0x00, _rest::binary>>), do: true
-  def is_woff2(_binary), do: false
+  @spec woff2?(binary()) :: boolean()
+  def woff2?(<<0x77, 0x4F, 0x46, 0x32, 0x00, 0x01, 0x00, 0x00, _rest::binary>>), do: true
+  def woff2?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's a ttf font.
@@ -23,18 +23,18 @@ defmodule Infer.Font do
   ## Examples
 
       iex> binary = File.read!("test/fonts/sample.ttf")
-      iex> Infer.Font.is_ttf(binary)
+      iex> Infer.Font.ttf?(binary)
       true
 
   """
-  @spec is_ttf(binary()) :: boolean()
-  def is_ttf(<<0x00, 0x01, 0x00, 0x00, 0x00, _rest::binary>>), do: true
-  def is_ttf(_binary), do: false
+  @spec ttf?(binary()) :: boolean()
+  def ttf?(<<0x00, 0x01, 0x00, 0x00, 0x00, _rest::binary>>), do: true
+  def ttf?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's a otf font.
   """
-  @spec is_otf(binary()) :: boolean()
-  def is_otf(<<0x4F, 0x54, 0x54, 0x4F, 0x00>>), do: true
-  def is_otf(_binary), do: false
+  @spec otf?(binary()) :: boolean()
+  def otf?(<<0x4F, 0x54, 0x54, 0x4F, 0x00>>), do: true
+  def otf?(_binary), do: false
 end

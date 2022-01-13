@@ -12,7 +12,7 @@ by adding `infer` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:infer, "~> 0.1.1"}
+    {:infer, "~> 0.2.0"}
   ]
 end
 ```
@@ -29,7 +29,7 @@ Takes the binary file contents as argument and returns the `Infer.Type.t()` if t
 ```elixir
 iex> binary = File.read!("test/images/sample.png")
 iex> Infer.get(binary)
-%Infer.Type{extension: "png", matcher: &Infer.Image.is_png/1, matcher_type: :image, mime_type: "image/png"}
+%Infer.Type{extension: "png", matcher: &Infer.Image.png?/1, matcher_type: :image, mime_type: "image/png"}
 ```
 
 ### `Infer.get_from_path/1`
@@ -38,58 +38,58 @@ Similar to `Infer.get/1`, but takes the file path as argument.
 
 ```elixir
 iex> Infer.get_from_path("test/images/sample.png")
-%Infer.Type{extension: "png", matcher: &Infer.Image.is_png/1, matcher_type: :image, mime_type: "image/png"}
+%Infer.Type{extension: "png", matcher: &Infer.Image.png?/1, matcher_type: :image, mime_type: "image/png"}
 ```
 
-### `Infer.is/2`
+### `Infer.is?/2`
 
 Takes the binary content and the file extension as arguments. Returns whether the file content is
 of the given extension.
 
 ```elixir
 iex> binary = File.read!("test/images/sample.png")
-iex> Infer.is(binary, "png")
+iex> Infer.is?(binary, "png")
 true
 ```
 
-### `Infer.is_mime/2`
+### `Infer.mime?/2`
 
 Takes the binary content and the file extension as arguments. Returns whether the file content is
 of the given mime type.
 
 ```elixir
 iex> binary = File.read!("test/images/sample.png")
-iex> Infer.is_mime(binary, "image/png")
+iex> Infer.mime?(binary, "image/png")
 true
 ```
 
-### `Infer.is_image/1`
+### `Infer.image?/1`
 
 Takes the binary file contents as argument and returns whether the file is an image or not.
 
 ```elixir
 iex> binary = File.read!("test/images/sample.png")
-iex> Infer.is_image(binary)
+iex> Infer.image?(binary)
 true
 ```
 
-### `Infer.is_document/1`
+### `Infer.document?/1`
 
 Takes the binary file contents as argument and returns whether the file is a document (microsoft office, open office)
 
 ```elixir
 iex> binary = File.read!("test/docs/sample.xlsx")
-iex> Infer.is_document(binary)
+iex> Infer.document?(binary)
 true
 ```
 
-### `Infer.Doc.is_docx/1`
+### `Infer.Doc.docx?/1`
 
 Takes the binary file contents as arguments. Returns `true` if it's Microsoft Word Open XML Format Document (DOCX) data.
 
 ```elixir
 iex> binary = File.read!("test/docs/sample.docx")
-iex> Infer.Doc.is_docx(binary)
+iex> Infer.Doc.docx?(binary)
 true
 ```
 

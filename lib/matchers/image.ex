@@ -9,17 +9,17 @@ defmodule Infer.Image do
   ## Examples
 
       iex> binary = File.read!("test/images/sample.jpg")
-      iex> Infer.Image.is_jpeg(binary)
+      iex> Infer.Image.jpeg?(binary)
       true
 
       iex> binary = File.read!("test/images/sample.jp2")
-      iex> Infer.Image.is_jpeg(binary)
+      iex> Infer.Image.jpeg?(binary)
       false
 
   """
-  @spec is_jpeg(binary()) :: boolean()
-  def is_jpeg(<<0xFF, 0xD8, 0xFF>> <> _), do: true
-  def is_jpeg(_binary), do: false
+  @spec jpeg?(binary()) :: boolean()
+  def jpeg?(<<0xFF, 0xD8, 0xFF>> <> _), do: true
+  def jpeg?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's a jpeg2000.
@@ -27,17 +27,17 @@ defmodule Infer.Image do
   ## Examples
 
       iex> binary = File.read!("test/images/sample.jp2")
-      iex> Infer.Image.is_jpeg2000(binary)
+      iex> Infer.Image.jpeg2000?(binary)
       true
 
       iex> binary = File.read!("test/images/sample.jpg")
-      iex> Infer.Image.is_jpeg2000(binary)
+      iex> Infer.Image.jpeg2000?(binary)
       false
 
   """
-  @spec is_jpeg2000(binary()) :: boolean()
-  def is_jpeg2000(<<0x0, 0x0, 0x0, 0xC, 0x6A, 0x50, 0x20, 0x20, 0xD, 0xA, 0x87, 0xA, 0x0, _rest::binary>>), do: true
-  def is_jpeg2000(_binary), do: false
+  @spec jpeg2000?(binary()) :: boolean()
+  def jpeg2000?(<<0x0, 0x0, 0x0, 0xC, 0x6A, 0x50, 0x20, 0x20, 0xD, 0xA, 0x87, 0xA, 0x0, _rest::binary>>), do: true
+  def jpeg2000?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's a png.
@@ -45,17 +45,17 @@ defmodule Infer.Image do
   ## Examples
 
       iex> binary = File.read!("test/images/sample.png")
-      iex> Infer.Image.is_png(binary)
+      iex> Infer.Image.png?(binary)
       true
 
       iex> binary = File.read!("test/images/sample.jpg")
-      iex> Infer.Image.is_png(binary)
+      iex> Infer.Image.png?(binary)
       false
 
   """
-  @spec is_png(binary()) :: boolean()
-  def is_png(<<0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, _rest::binary>>), do: true
-  def is_png(_binary), do: false
+  @spec png?(binary()) :: boolean()
+  def png?(<<0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, _rest::binary>>), do: true
+  def png?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's a gif.
@@ -63,17 +63,17 @@ defmodule Infer.Image do
   ## Examples
 
       iex> binary = File.read!("test/images/sample.gif")
-      iex> Infer.Image.is_gif(binary)
+      iex> Infer.Image.gif?(binary)
       true
 
       iex> binary = File.read!("test/images/sample.jpg")
-      iex> Infer.Image.is_gif(binary)
+      iex> Infer.Image.gif?(binary)
       false
 
   """
-  @spec is_gif(binary()) :: boolean()
-  def is_gif(<<0x47, 0x49, 0x46, _rest::binary>>), do: true
-  def is_gif(_binary), do: false
+  @spec gif?(binary()) :: boolean()
+  def gif?(<<0x47, 0x49, 0x46, _rest::binary>>), do: true
+  def gif?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's a webp.
@@ -81,17 +81,17 @@ defmodule Infer.Image do
   ## Examples
 
       iex> binary = File.read!("test/images/sample.webp")
-      iex> Infer.Image.is_webp(binary)
+      iex> Infer.Image.webp?(binary)
       true
 
       iex> binary = File.read!("test/images/sample.gif")
-      iex> Infer.Image.is_webp(binary)
+      iex> Infer.Image.webp?(binary)
       false
 
   """
-  @spec is_webp(binary()) :: boolean()
-  def is_webp(<<_head::binary-size(8), 0x57, 0x45, 0x42, 0x50, _rest::binary>>), do: true
-  def is_webp(_binary), do: false
+  @spec webp?(binary()) :: boolean()
+  def webp?(<<_head::binary-size(8), 0x57, 0x45, 0x42, 0x50, _rest::binary>>), do: true
+  def webp?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's a cr2.
@@ -99,18 +99,18 @@ defmodule Infer.Image do
   ## Examples
 
       iex> binary = File.read!("test/images/sample.cr2")
-      iex> Infer.Image.is_cr2(binary)
+      iex> Infer.Image.cr2?(binary)
       true
 
       iex> binary = File.read!("test/images/sample.tiff")
-      iex> Infer.Image.is_cr2(binary)
+      iex> Infer.Image.cr2?(binary)
       false
 
   """
-  @spec is_cr2(binary()) :: boolean()
-  def is_cr2(<<0x49, 0x49, 0x2A, 0x0, _data::binary-size(4), 0x43, 0x52, 0x02, _rest::binary>>), do: true
-  def is_cr2(<<0x4D, 0x4D, 0x0, 0x2A, _data::binary-size(4), 0x43, 0x52, 0x02, _rest::binary>>), do: true
-  def is_cr2(_binary), do: false
+  @spec cr2?(binary()) :: boolean()
+  def cr2?(<<0x49, 0x49, 0x2A, 0x0, _data::binary-size(4), 0x43, 0x52, 0x02, _rest::binary>>), do: true
+  def cr2?(<<0x4D, 0x4D, 0x0, 0x2A, _data::binary-size(4), 0x43, 0x52, 0x02, _rest::binary>>), do: true
+  def cr2?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's a tiff.
@@ -118,22 +118,22 @@ defmodule Infer.Image do
   ## Examples
 
       iex> binary = File.read!("test/images/sample.tiff")
-      iex> Infer.Image.is_tiff(binary)
+      iex> Infer.Image.tiff?(binary)
       true
 
       iex> binary = File.read!("test/images/sample.cr2")
-      iex> Infer.Image.is_tiff(binary)
+      iex> Infer.Image.tiff?(binary)
       false
 
   """
-  @spec is_tiff(binary()) :: boolean()
-  def is_tiff(<<0x49, 0x49, 0x2A, 0x0, _data::binary-size(4), i_8, i_9, _rest::binary>> = binary) when i_8 != <<0x43>> and i_9 != <<0x52>>,
-    do: !is_cr2(binary)
+  @spec tiff?(binary()) :: boolean()
+  def tiff?(<<0x49, 0x49, 0x2A, 0x0, _data::binary-size(4), i_8, i_9, _rest::binary>> = binary) when i_8 != <<0x43>> and i_9 != <<0x52>>,
+    do: !cr2?(binary)
 
-  def is_tiff(<<0x4D, 0x4D, 0x0, 0x2A, _data::binary-size(4), i_8, i_9, _rest::binary>> = binary) when i_8 != <<0x43>> and i_9 != <<0x52>>,
-    do: !is_cr2(binary)
+  def tiff?(<<0x4D, 0x4D, 0x0, 0x2A, _data::binary-size(4), i_8, i_9, _rest::binary>> = binary) when i_8 != <<0x43>> and i_9 != <<0x52>>,
+    do: !cr2?(binary)
 
-  def is_tiff(_binary), do: false
+  def tiff?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's a bmp.
@@ -141,17 +141,17 @@ defmodule Infer.Image do
   ## Examples
 
       iex> binary = File.read!("test/images/sample.bmp")
-      iex> Infer.Image.is_bmp(binary)
+      iex> Infer.Image.bmp?(binary)
       true
 
       iex> binary = File.read!("test/images/sample.png")
-      iex> Infer.Image.is_bmp(binary)
+      iex> Infer.Image.bmp?(binary)
       false
 
   """
-  @spec is_bmp(binary()) :: boolean()
-  def is_bmp(<<0x42, 0x4D, _rest::binary>>), do: true
-  def is_bmp(_binary), do: false
+  @spec bmp?(binary()) :: boolean()
+  def bmp?(<<0x42, 0x4D, _rest::binary>>), do: true
+  def bmp?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's a jxr.
@@ -159,17 +159,17 @@ defmodule Infer.Image do
   ## Examples
 
       iex> binary = File.read!("test/images/sample.jxr")
-      iex> Infer.Image.is_jxr(binary)
+      iex> Infer.Image.jxr?(binary)
       true
 
       iex> binary = File.read!("test/images/sample.png")
-      iex> Infer.Image.is_jxr(binary)
+      iex> Infer.Image.jxr?(binary)
       false
 
   """
-  @spec is_jxr(binary()) :: boolean()
-  def is_jxr(<<0x49, 0x49, 0xBC, _rest::binary>>), do: true
-  def is_jxr(_binary), do: false
+  @spec jxr?(binary()) :: boolean()
+  def jxr?(<<0x49, 0x49, 0xBC, _rest::binary>>), do: true
+  def jxr?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's a psd.
@@ -177,17 +177,17 @@ defmodule Infer.Image do
   ## Examples
 
       iex> binary = File.read!("test/images/sample.psd")
-      iex> Infer.Image.is_psd(binary)
+      iex> Infer.Image.psd?(binary)
       true
 
       iex> binary = File.read!("test/images/sample.png")
-      iex> Infer.Image.is_psd(binary)
+      iex> Infer.Image.psd?(binary)
       false
 
   """
-  @spec is_psd(binary()) :: boolean()
-  def is_psd(<<0x38, 0x42, 0x50, 0x53, _rest::binary>>), do: true
-  def is_psd(_binary), do: false
+  @spec psd?(binary()) :: boolean()
+  def psd?(<<0x38, 0x42, 0x50, 0x53, _rest::binary>>), do: true
+  def psd?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's a ico.
@@ -195,17 +195,17 @@ defmodule Infer.Image do
   ## Examples
 
       iex> binary = File.read!("test/images/sample.ico")
-      iex> Infer.Image.is_ico(binary)
+      iex> Infer.Image.ico?(binary)
       true
 
       iex> binary = File.read!("test/images/sample.png")
-      iex> Infer.Image.is_ico(binary)
+      iex> Infer.Image.ico?(binary)
       false
 
   """
-  @spec is_ico(binary()) :: boolean()
-  def is_ico(<<0x00, 0x00, 0x01, 0x00, _rest::binary>>), do: true
-  def is_ico(_binary), do: false
+  @spec ico?(binary()) :: boolean()
+  def ico?(<<0x00, 0x00, 0x01, 0x00, _rest::binary>>), do: true
+  def ico?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's a heif.
@@ -213,16 +213,16 @@ defmodule Infer.Image do
   ## Examples
 
       iex> binary = File.read!("test/images/sample.heif")
-      iex> Infer.Image.is_heif(binary)
+      iex> Infer.Image.heif?(binary)
       true
 
       iex> binary = File.read!("test/images/sample.avif")
-      iex> Infer.Image.is_heif(binary)
+      iex> Infer.Image.heif?(binary)
       false
 
   """
-  @spec is_heif(binary()) :: boolean()
-  def is_heif(<<ftyp_length::binary-size(4), "ftyp", _::binary>> = binary) when bit_size(ftyp_length) >= 16 do
+  @spec heif?(binary()) :: boolean()
+  def heif?(<<ftyp_length::binary-size(4), "ftyp", _::binary>> = binary) when bit_size(ftyp_length) >= 16 do
     case get_ftyp(binary) do
       {"heic", _minor, _compatbile} -> true
       {major, _minor, compatible} when major in ["mif1", "msf1"] -> 'heic' in compatible
@@ -230,7 +230,7 @@ defmodule Infer.Image do
     end
   end
 
-  def is_heif(_binary), do: false
+  def heif?(_binary), do: false
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's a avif.
@@ -238,16 +238,16 @@ defmodule Infer.Image do
   ## Examples
 
       iex> binary = File.read!("test/images/sample.avif")
-      iex> Infer.Image.is_avif(binary)
+      iex> Infer.Image.avif?(binary)
       true
 
       iex> binary = File.read!("test/images/sample.heif")
-      iex> Infer.Image.is_avif(binary)
+      iex> Infer.Image.avif?(binary)
       false
 
   """
-  @spec is_avif(binary()) :: boolean()
-  def is_avif(<<ftyp_length::binary-size(4), "ftyp", _::binary>> = binary) when bit_size(ftyp_length) >= 16 do
+  @spec avif?(binary()) :: boolean()
+  def avif?(<<ftyp_length::binary-size(4), "ftyp", _::binary>> = binary) when bit_size(ftyp_length) >= 16 do
     case get_ftyp(binary) do
       {major, _minor, _compatbile} when major in ["avif", "avis"] -> true
       {_major, _minor, compatible} -> 'avif' in compatible || 'avis' in compatible
@@ -255,7 +255,7 @@ defmodule Infer.Image do
     end
   end
 
-  def is_avif(_binary), do: false
+  def avif?(_binary), do: false
 
   defp get_ftyp(<<ftyp_length::binary-size(4), "ftyp", major::binary-size(4), minor::binary-size(4), rest::binary>>) do
     compatible =
