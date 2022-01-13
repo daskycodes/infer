@@ -25,7 +25,7 @@ defmodule Infer do
 
       iex> binary = File.read!("test/images/sample.png")
       iex> Infer.get(binary)
-      %Infer.Type{extension: "png", matcher: &Infer.Image.is_png/1, matcher_type: :image, mime_type: "image/png"}
+      %Infer.Type{extension: "png", matcher: &Infer.Image.png?/1, matcher_type: :image, mime_type: "image/png"}
 
   """
   @spec get(binary()) :: Infer.Type.t() | nil
@@ -37,7 +37,7 @@ defmodule Infer do
   ## Examples
 
       iex> Infer.get_from_path("test/images/sample.png")
-      %Infer.Type{extension: "png", matcher: &Infer.Image.is_png/1, matcher_type: :image, mime_type: "image/png"}
+      %Infer.Type{extension: "png", matcher: &Infer.Image.png?/1, matcher_type: :image, mime_type: "image/png"}
 
   """
   @spec get_from_path(binary()) :: Infer.Type.t() | nil
@@ -53,12 +53,12 @@ defmodule Infer do
   ## Examples
 
       iex> binary = File.read!("test/images/sample.png")
-      iex> Infer.is(binary, "png")
+      iex> Infer.is?(binary, "png")
       true
 
   """
-  @spec is(binary(), Infer.Type.extension()) :: boolean()
-  def is(binary, extension), do: Enum.any?(@matchers, &(&1.extension == extension && &1.matcher.(binary)))
+  @spec is?(binary(), Infer.Type.extension()) :: boolean()
+  def is?(binary, extension), do: Enum.any?(@matchers, &(&1.extension == extension && &1.matcher.(binary)))
 
   @doc """
   Takes the binary content and the file extension as arguments. Returns whether the file content is
@@ -67,36 +67,36 @@ defmodule Infer do
   ## Examples
 
       iex> binary = File.read!("test/images/sample.png")
-      iex> Infer.is_mime(binary, "image/png")
+      iex> Infer.mime?(binary, "image/png")
       true
 
   """
-  @spec is_mime(binary(), Infer.Type.mime_type()) :: boolean()
-  def is_mime(binary, mime_type), do: Enum.any?(@matchers, &(&1.mime_type == mime_type && &1.matcher.(binary)))
+  @spec mime?(binary(), Infer.Type.mime_type()) :: boolean()
+  def mime?(binary, mime_type), do: Enum.any?(@matchers, &(&1.mime_type == mime_type && &1.matcher.(binary)))
 
   @doc """
   Returns whether the given extension is supported.
 
   ## Examples
 
-      iex> Infer.is_supported("png")
+      iex> Infer.supported?("png")
       true
 
   """
-  @spec is_supported(Infer.Type.extension()) :: boolean()
-  def is_supported(extension), do: Enum.any?(@matchers, &(&1.extension == extension))
+  @spec supported?(Infer.Type.extension()) :: boolean()
+  def supported?(extension), do: Enum.any?(@matchers, &(&1.extension == extension))
 
   @doc """
   Returns whether the given mime type is supported.
 
   ## Examples
 
-      iex> Infer.is_mime_supported("image/png")
+      iex> Infer.mime_supported?("image/png")
       true
 
   """
-  @spec is_mime_supported(Infer.Type.mime_type()) :: boolean()
-  def is_mime_supported(mime_type), do: Enum.any?(@matchers, &(&1.mime_type == mime_type))
+  @spec mime_supported?(Infer.Type.mime_type()) :: boolean()
+  def mime_supported?(mime_type), do: Enum.any?(@matchers, &(&1.mime_type == mime_type))
 
   @doc """
   Takes the binary file contents as argument and returns whether the file is an application or not.
@@ -104,16 +104,16 @@ defmodule Infer do
   ## Examples
 
       iex> binary = File.read!("test/app/sample.wasm")
-      iex> Infer.is_app(binary)
+      iex> Infer.app?(binary)
       true
 
       iex> binary = File.read!("test/images/sample.png")
-      iex> Infer.is_app(binary)
+      iex> Infer.app?(binary)
       false
 
   """
-  @spec is_app(binary()) :: boolean()
-  def is_app(binary), do: Enum.any?(@matchers, &(&1.matcher_type == :app && &1.matcher.(binary)))
+  @spec app?(binary()) :: boolean()
+  def app?(binary), do: Enum.any?(@matchers, &(&1.matcher_type == :app && &1.matcher.(binary)))
 
   @doc """
   Takes the binary file contents as argument and returns whether the file is an archive or not.
@@ -121,16 +121,16 @@ defmodule Infer do
   ## Examples
 
       iex> binary = File.read!("test/archives/sample.zip")
-      iex> Infer.is_archive(binary)
+      iex> Infer.archive?(binary)
       true
 
       iex> binary = File.read!("test/images/sample.png")
-      iex> Infer.is_archive(binary)
+      iex> Infer.archive?(binary)
       false
 
   """
-  @spec is_archive(binary()) :: boolean()
-  def is_archive(binary), do: Enum.any?(@matchers, &(&1.matcher_type == :archive && &1.matcher.(binary)))
+  @spec archive?(binary()) :: boolean()
+  def archive?(binary), do: Enum.any?(@matchers, &(&1.matcher_type == :archive && &1.matcher.(binary)))
 
   @doc """
   Takes the binary file contents as argument and returns whether the file is an archive or not.
@@ -138,16 +138,16 @@ defmodule Infer do
   ## Examples
 
       iex> binary = File.read!("test/audio/sample.mp3")
-      iex> Infer.is_audio(binary)
+      iex> Infer.audio?(binary)
       true
 
       iex> binary = File.read!("test/images/sample.png")
-      iex> Infer.is_audio(binary)
+      iex> Infer.audio?(binary)
       false
 
   """
-  @spec is_audio(binary()) :: boolean()
-  def is_audio(binary), do: Enum.any?(@matchers, &(&1.matcher_type == :audio && &1.matcher.(binary)))
+  @spec audio?(binary()) :: boolean()
+  def audio?(binary), do: Enum.any?(@matchers, &(&1.matcher_type == :audio && &1.matcher.(binary)))
 
   @doc """
   Takes the binary file contents as argument and returns whether the file is an book (epub or mobi) or not.
@@ -155,16 +155,16 @@ defmodule Infer do
   ## Examples
 
       iex> binary = File.read!("test/books/sample.epub")
-      iex> Infer.is_book(binary)
+      iex> Infer.book?(binary)
       true
 
       iex> binary = File.read!("test/images/sample.png")
-      iex> Infer.is_book(binary)
+      iex> Infer.book?(binary)
       false
 
   """
-  @spec is_book(binary()) :: boolean()
-  def is_book(binary), do: Enum.any?(@matchers, &(&1.matcher_type == :book && &1.matcher.(binary)))
+  @spec book?(binary()) :: boolean()
+  def book?(binary), do: Enum.any?(@matchers, &(&1.matcher_type == :book && &1.matcher.(binary)))
 
   @doc """
   Takes the binary file contents as argument and returns whether the file is a document (microsoft office, open office)
@@ -172,24 +172,24 @@ defmodule Infer do
   ## Examples
 
       iex> binary = File.read!("test/docs/sample.xlsx")
-      iex> Infer.is_document(binary)
+      iex> Infer.document?(binary)
       true
 
       iex> binary = File.read!("test/docs/sample.pptx")
-      iex> Infer.is_document(binary)
+      iex> Infer.document?(binary)
       true
 
       iex> binary = File.read!("test/docs/sample.odp")
-      iex> Infer.is_document(binary)
+      iex> Infer.document?(binary)
       true
 
       iex> binary = File.read!("test/images/sample.png")
-      iex> Infer.is_document(binary)
+      iex> Infer.document?(binary)
       false
 
   """
-  @spec is_document(binary()) :: boolean()
-  def is_document(binary), do: Enum.any?(@matchers, &(&1.matcher_type == :doc && &1.matcher.(binary)))
+  @spec document?(binary()) :: boolean()
+  def document?(binary), do: Enum.any?(@matchers, &(&1.matcher_type == :doc && &1.matcher.(binary)))
 
   @doc """
   Takes the binary file contents as argument and returns whether the file is a font or not.
@@ -197,16 +197,16 @@ defmodule Infer do
   ## Examples
 
       iex> binary = File.read!("test/fonts/sample.ttf")
-      iex> Infer.is_font(binary)
+      iex> Infer.font?(binary)
       true
 
       iex> binary = File.read!("test/app/sample.wasm")
-      iex> Infer.is_font(binary)
+      iex> Infer.font?(binary)
       false
 
   """
-  @spec is_font(binary()) :: boolean()
-  def is_font(binary), do: Enum.any?(@matchers, &(&1.matcher_type == :font && &1.matcher.(binary)))
+  @spec font?(binary()) :: boolean()
+  def font?(binary), do: Enum.any?(@matchers, &(&1.matcher_type == :font && &1.matcher.(binary)))
 
   @doc """
   Takes the binary file contents as argument and returns whether the file is an image or not.
@@ -214,16 +214,16 @@ defmodule Infer do
   ## Examples
 
       iex> binary = File.read!("test/images/sample.png")
-      iex> Infer.is_image(binary)
+      iex> Infer.image?(binary)
       true
 
       iex> binary = File.read!("test/app/sample.wasm")
-      iex> Infer.is_image(binary)
+      iex> Infer.image?(binary)
       false
 
   """
-  @spec is_image(binary()) :: boolean()
-  def is_image(binary), do: Enum.any?(@matchers, &(&1.matcher_type == :image && &1.matcher.(binary)))
+  @spec image?(binary()) :: boolean()
+  def image?(binary), do: Enum.any?(@matchers, &(&1.matcher_type == :image && &1.matcher.(binary)))
 
   @doc """
   Takes the binary file contents as argument and returns whether the file is a video or not.
@@ -231,14 +231,14 @@ defmodule Infer do
   ## Examples
 
       iex> binary = File.read!("test/videos/sample.mp4")
-      iex> Infer.is_video(binary)
+      iex> Infer.video?(binary)
       true
 
       iex> binary = File.read!("test/app/sample.wasm")
-      iex> Infer.is_video(binary)
+      iex> Infer.video?(binary)
       false
 
   """
-  @spec is_video(binary()) :: boolean()
-  def is_video(binary), do: Enum.any?(@matchers, &(&1.matcher_type == :video && &1.matcher.(binary)))
+  @spec video?(binary()) :: boolean()
+  def video?(binary), do: Enum.any?(@matchers, &(&1.matcher_type == :video && &1.matcher.(binary)))
 end

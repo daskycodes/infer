@@ -10,18 +10,18 @@ defmodule Infer.Text do
 
   ## Examples
 
-      iex> Infer.Text.is_html("<!DOCTYPE html>")
+      iex> Infer.Text.html?("<!DOCTYPE html>")
       true
 
-      iex> Infer.Text.is_html("     <BODY>")
+      iex> Infer.Text.html?("     <BODY>")
       true
 
-      iex> Infer.Text.is_html("<")
+      iex> Infer.Text.html?("<")
       false
 
   """
-  @spec is_html(binary()) :: boolean()
-  def is_html(binary) do
+  @spec html?(binary()) :: boolean()
+  def html?(binary) do
     values = [
       '<!DOCTYPE HTML',
       '<HTML',
@@ -63,8 +63,8 @@ defmodule Infer.Text do
 
   See: https://mimesniff.spec.whatwg.org/
   """
-  @spec is_xml(binary()) :: boolean()
-  def is_xml(binary) do
+  @spec xml?(binary()) :: boolean()
+  def xml?(binary) do
     char_list =
       binary
       |> String.trim()
@@ -76,9 +76,9 @@ defmodule Infer.Text do
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's a shell script.
   """
-  @spec is_shell_script(binary()) :: boolean()
-  def is_shell_script(<<"#!", _rest::binary>>), do: true
-  def is_shell_script(_binary), do: false
+  @spec shell_script?(binary()) :: boolean()
+  def shell_script?(<<"#!", _rest::binary>>), do: true
+  def shell_script?(_binary), do: false
 
   defp starts_with_ignore_ascii_case(char_list, needle) when length(char_list) >= length(needle) do
     char_list = Enum.take(char_list, length(needle))
