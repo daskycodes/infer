@@ -1,23 +1,20 @@
 defmodule TestFiles do
   @types [:app, :archives, :audio, :books, :docs, :fonts, :images, :videos, :text]
+  @paths Map.new(@types, &{&1, Path.wildcard("test/#{&1}/*")})
 
-  @files (for type <- @types,
-              path <- Path.wildcard("test/#{type}/*") do
-            @external_resource Path.relative_to_cwd(path)
+  def list(opts \\ []) do
+    requested_types =
+      case List.wrap(opts[:only]) do
+        [] -> @types -- List.wrap(opts[:except])
+        only -> only
+      end
 
-            {type, {Path.basename(path), File.read!(path)}}
-          end)
-         |> Enum.group_by(&elem(&1, 0), &elem(&1, 1))
-         |> Map.new()
-
-  def list(opts \\ [])
-  def list(only: only), do: Map.fetch!(@files, only)
-
-  def list(opts) do
-    except = List.wrap(opts[:except])
-
-    Map.take(@files, @types -- except)
-    |> Map.values()
-    |> List.flatten()
+    Stream.flat_map(@paths, fn {type, paths} ->
+      if type in requested_types do
+        Enum.map(paths, &{Path.basename(&1), File.read!(&1)})
+      else
+        []
+      end
+    end)
   end
 end
