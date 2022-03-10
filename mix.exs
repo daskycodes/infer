@@ -4,7 +4,7 @@ defmodule Infer.MixProject do
   def project do
     [
       app: :infer,
-      version: "0.2.0",
+      version: "0.2.1",
       elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -36,7 +36,7 @@ defmodule Infer.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ex_doc, git: "https://github.com/elixir-lang/ex_doc", ref: "a011116", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.28", only: :dev, runtime: false}
     ]
   end
 
