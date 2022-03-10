@@ -1,5 +1,6 @@
 defmodule InferTest do
   use ExUnit.Case
+
   doctest Infer
   doctest Infer.App
   doctest Infer.Archive
