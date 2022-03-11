@@ -2,15 +2,6 @@ defmodule InferTest do
   use ExUnit.Case, async: true
 
   doctest Infer
-  doctest Infer.App
-  doctest Infer.Archive
-  doctest Infer.Audio
-  doctest Infer.Book
-  doctest Infer.Doc
-  doctest Infer.Image
-  doctest Infer.Font
-  doctest Infer.Text
-  doctest Infer.Video
 
   describe "Infer.App" do
     @matchers Infer.Matchers.list() |> Enum.filter(&(&1.matcher_type == :app))
@@ -123,7 +114,7 @@ defmodule InferTest do
   describe "Infer.Doc" do
     @matchers Infer.Matchers.list() |> Enum.filter(&(&1.matcher_type == :doc))
 
-    test "handles documnet files" do
+    test "handles document files" do
       for {_path, binary} <- TestFiles.list(only: :docs) do
         assert Enum.find(@matchers, & &1.matcher.(binary))
       end
