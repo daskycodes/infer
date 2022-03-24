@@ -60,29 +60,27 @@ defmodule Infer.Doc do
   def pptx?(binary), do: msooxml?(binary) == :pptx
 
   defp msooxml?(<<?P, ?K, 0x03, 0x04, _part::binary-size(26), "[Content_Types].xml", _rest::binary>> = binary) do
-    {:ok, parts} = :zip.unzip(binary, [:memory])
-    search_x_format(parts)
+    search_x_format(binary)
   end
 
   defp msooxml?(<<?P, ?K, 0x03, 0x04, _part::binary-size(26), "docProps", _rest::binary>> = binary) do
-    {:ok, parts} = :zip.unzip(binary, [:memory])
-    search_x_format(parts)
+    search_x_format(binary)
   end
 
   defp msooxml?(<<?P, ?K, 0x03, 0x04, _part::binary-size(26), "_rels/.rels", _rest::binary>> = binary) do
-    {:ok, parts} = :zip.unzip(binary, [:memory])
-    search_x_format(parts)
+    search_x_format(binary)
   end
 
   defp msooxml?(_binary), do: nil
 
-  defp search_x_format([_, _, {[?w, ?o, ?r, ?d, ?/ | _], _} | _]), do: :docx
-  defp search_x_format([_, _, {[?x, ?l, ?/ | _], _} | _]), do: :xlsx
-  defp search_x_format([_, _, {[?p, ?p, ?t, ?/ | _], _} | _]), do: :pptx
-  defp search_x_format([_, _, _, {[?w, ?o, ?r, ?d, ?/ | _], _} | _]), do: :docx
-  defp search_x_format([_, _, _, {[?x, ?l, ?/ | _], _} | _]), do: :xlsx
-  defp search_x_format([_, _, _, {[?p, ?p, ?t, ?/ | _], _} | _]), do: :pptx
-  defp search_x_format(_), do: :ooxml
+  defp search_x_format(binary) do
+    case :binary.match(binary, [<<?w, ?o, ?r, ?d, ?/>>, <<?p, ?p, ?t, ?/>>, <<?x, ?l, ?/>>]) do
+      {_pos, 5} -> :docx
+      {_pos, 4} -> :pptx
+      {_pos, 3} -> :xlsx
+      :nomatch -> :ooxml
+    end
+  end
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's an OpenDocument Text Document.
