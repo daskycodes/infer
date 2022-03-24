@@ -32,18 +32,23 @@ defmodule Infer do
   def get(binary), do: Enum.find(@matchers, & &1.matcher.(binary))
 
   @doc """
-  Same as `Infer.get/1`, but takes the file path as argument.
+  Same as `Infer.get/1`, but takes the file path and byte size as argument.
 
   ## Examples
 
-      iex> Infer.get_from_path("test/images/sample.png")
+      iex> Infer.get_from_path("test/images/sample.png", 128)
       %Infer.Type{extension: "png", matcher: &Infer.Image.png?/1, matcher_type: :image, mime_type: "image/png"}
+
+      iex> Infer.get_from_path("test/docs/sample.pptx")
+      %Infer.Type{extension: "pptx", matcher: &Infer.Doc.pptx?/1, matcher_type: :doc, mime_type: "application/vnd.openxmlformats-officedocument.presentationml.presentation"}
 
   """
   @spec get_from_path(binary()) :: Infer.Type.t() | nil
-  def get_from_path(path) do
-    binary = File.read!(path)
-    Enum.find(@matchers, & &1.matcher.(binary))
+  def get_from_path(path, byte_size \\ 2048) do
+    with {:ok, io_device} <- :file.open(path, [:read, :binary]),
+         {:ok, binary} <- :file.read(io_device, byte_size) do
+      Enum.find(@matchers, & &1.matcher.(binary))
+    end
   end
 
   @doc """
