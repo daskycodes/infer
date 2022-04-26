@@ -27,9 +27,17 @@ defmodule Infer.Audio do
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's a m4a.
+
+
+  ## Examples
+
+      iex> binary = File.read!("test/audio/sample.m4a")
+      iex> Infer.Audio.m4a?(binary)
+      true
+
   """
   @spec m4a?(binary()) :: boolean()
-  def m4a?(<<_data::binary-size(4), 0x66, 0x74, 0x79, 0x70, 0x4D, 0x3F, 0x41, _rest::binary>>), do: true
+  def m4a?(<<_data::binary-size(4), 0x66, 0x74, 0x79, 0x70, 0x4D, 0x34, 0x41, _rest::binary>>), do: true
   def m4a?(<<0x4D, 0x34, 0x41, 0x20, _rest::binary>>), do: true
   def m4a?(_binary), do: false
 
