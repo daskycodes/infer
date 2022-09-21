@@ -47,6 +47,7 @@ defmodule Infer do
   def get_from_path(path, byte_size \\ 2048) do
     with {:ok, io_device} <- :file.open(path, [:read, :binary]),
          {:ok, binary} <- :file.read(io_device, byte_size) do
+      :file.close(io_device)
       Enum.find(@matchers, & &1.matcher.(binary))
     end
   end
