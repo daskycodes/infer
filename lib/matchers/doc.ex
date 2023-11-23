@@ -3,7 +3,7 @@ defmodule Infer.Doc do
   Document type matchers based on the [magic number](https://en.wikipedia.org/wiki/Magic_number_(programming))
   """
 
-  use Bitwise
+  import Bitwise
 
   @doc """
   Takes the binary file contents as arguments. Returns `true` if it's Microsoft Word Open XML Format Document (DOCX) data.
