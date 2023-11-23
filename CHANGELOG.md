@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.2.5 (2023-11-23)
+
+- Bug fixes
+  - Fix `matcher_fun` typespec as it caused dialyzer to fail by @smaximov
+  - Improve `get_from_path/1,2` to return `nil` instead of an error tuple on an invalid path
+    and fix a possible leaking descriptor by @smaximov
+  - Use `import Bitwise`
+
 ## 0.2.4 (2022-03-10)
 
 - Bug fixes
