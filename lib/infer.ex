@@ -11,7 +11,7 @@ defmodule Infer do
     @type matcher_type() :: :app | :archive | :audio | :book | :image | :font | :text
     @type mime_type() :: binary()
     @type extension() :: binary()
-    @type matcher_fun() :: fun((binary() -> boolean()))
+    @type matcher_fun() :: (binary() -> boolean())
     @type t() :: %{matcher_type: matcher_type(), mime_type: mime_type(), extension: extension(), matcher: matcher_fun()}
   end
 
