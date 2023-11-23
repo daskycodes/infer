@@ -42,13 +42,22 @@ defmodule Infer do
       iex> Infer.get_from_path("test/docs/sample.pptx")
       %Infer.Type{extension: "pptx", matcher: &Infer.Doc.pptx?/1, matcher_type: :doc, mime_type: "application/vnd.openxmlformats-officedocument.presentationml.presentation"}
 
+      iex> Infer.get_from_path("test/docs/unknown.path")
+      nil
+
   """
   @spec get_from_path(binary()) :: Infer.Type.t() | nil
   def get_from_path(path, byte_size \\ 2048) do
-    with {:ok, io_device} <- :file.open(path, [:read, :binary]),
-         {:ok, binary} <- :file.read(io_device, byte_size) do
-      :file.close(io_device)
-      Enum.find(@matchers, & &1.matcher.(binary))
+    result = File.open(path, [:binary, :read], fn io_device ->
+      case IO.binread(io_device, byte_size) do
+        binary when is_binary(binary) -> Enum.find(@matchers, & &1.matcher.(binary))
+        _other -> nil
+      end
+    end)
+
+    case result do
+      {:ok, %Infer.Type{} = type} -> type
+      _other -> nil
     end
   end
 
