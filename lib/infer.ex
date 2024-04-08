@@ -12,7 +12,7 @@ defmodule Infer do
     @type mime_type() :: binary()
     @type extension() :: binary()
     @type matcher_fun() :: (binary() -> boolean())
-    @type t() :: %{matcher_type: matcher_type(), mime_type: mime_type(), extension: extension(), matcher: matcher_fun()}
+    @type t() :: %__MODULE__{matcher_type: matcher_type(), mime_type: mime_type(), extension: extension(), matcher: matcher_fun()}
   end
 
   # Load matchers on compilation
